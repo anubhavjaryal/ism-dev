@@ -1,0 +1,33 @@
+version: "3.2"
+services:
+  php:
+    build: './apis/'
+    networks:
+      - backend
+    volumes:
+      # - ./apis/:/var/www/html/
+      - ~/workspace/:/var/www/html/
+  apache:
+    build: './apache/'
+    depends_on:
+      - php
+      - mysql
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "8080:80"
+    volumes:
+      # - ./apis/:/var/www/html/
+      - ~/workspace/:/var/www/html/
+  mysql:
+    image: mysql:5.7
+    networks:
+      - backend
+    volumes:
+      - ./ismdb:/var/lib/mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+networks:
+  frontend:
+  backend:
